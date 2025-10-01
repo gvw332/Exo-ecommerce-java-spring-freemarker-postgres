@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Exo-ecommerce-spring-freemarker-postgres
+    username: postgres
+    password: Postgres003322*/
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #   afficher sql
+    show-sql: true
+    properties:
+      hibernate:
+        #       formatter le sql generer
+        format_sql: true
+
+server:
+  port: 8080
