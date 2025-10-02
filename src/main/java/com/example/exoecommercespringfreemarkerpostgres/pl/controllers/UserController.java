@@ -8,10 +8,12 @@ import com.example.exoecommercespringfreemarkerpostgres.pl.models.user.RegisterF
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,31 +24,37 @@ public class UserController {
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @GetMapping("/register")
-    public String register(){
+    public String showRegisterForm(Model model) {
+        model.addAttribute("registerForm", new RegisterForm("", ""));
         return "auth/register";
     }
 
     @PostMapping("/register")
     public String register(
-            @Valid @ModelAttribute RegisterForm registerForm,
-            BindingResult bindingResult
+            @Valid @ModelAttribute("registerForm") RegisterForm registerForm,
+            BindingResult bindingResult,
+            Model model
     ){
 
-        // Vérification des erreurs de formulaire
+        // Vérification des erreurs de validation
         if(bindingResult.hasErrors()){
+            model.addAttribute("registerForm", registerForm);
+            model.addAttribute("bindingResult", bindingResult); // AJOUT IMPORTANT
             return "auth/register";
         }
 
         // Vérifier si le nom d'utilisateur existe déjà
         if(userRepository.existsByUsername(registerForm.username())){
             bindingResult.rejectValue("username", "error.username", "Ce nom d'utilisateur existe déjà.");
+            model.addAttribute("registerForm", registerForm); // AJOUT
+            model.addAttribute("bindingResult", bindingResult); // AJOUT
             return "auth/register";
         }
 
         // Encodage du mot de passe
         String hashedPassword = passwordEncoder.encode(registerForm.password());
 
-        // Création de l'utilisateur avec le builder de Lombok
+        // Création de l'utilisateur
         User user = User.builder()
                 .username(registerForm.username())
                 .password(hashedPassword)
@@ -59,7 +67,19 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout,
+            Model model
+    ) {
+        if (error != null) {
+            model.addAttribute("error", "Nom d'utilisateur ou mot de passe incorrect.");
+        }
+
+        if (logout != null) {
+            model.addAttribute("message", "Vous avez été déconnecté avec succès.");
+        }
+
         return "auth/login";
     }
 }

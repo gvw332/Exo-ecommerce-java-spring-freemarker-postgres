@@ -6,7 +6,7 @@
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="../images/${art.imageUrl}" class="img-fluid rounded-start" alt="${art.title}">
+                <img src="/uploads/images/${art.imageUrl}" class="img-fluid rounded-start" alt="${art.title}">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -23,7 +23,7 @@
                             </button>
                         </form>
                     </#if>
-                    <a href="/art" class="btn btn-secondary">Retour</a>
+                    <a href="/art/" class="btn btn-secondary">Retour</a>
                 </div>
             </div>
         </div>

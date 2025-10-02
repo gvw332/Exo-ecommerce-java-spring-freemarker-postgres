@@ -1,20 +1,38 @@
 <#import "../layouts/main.ftlh" as layout>
 
 <@layout.block title="Login">
-    <h2>Se connecter</h2>
 
-    <form action="/login" method="post">
+    <h1>Connexion</h1>
 
-        <div class="mb-3">
-            <label for="username">Username :</label>
-            <input type="text" id="username" name="username" class="form-control"/>
+<#-- Message de succès (logout) -->
+    <#if message??>
+        <div style="color:green; margin-bottom: 15px;">
+            ${message}
         </div>
-        <div class="mb-3">
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" class="form-control"/>
-        </div>
+    </#if>
 
-        <button type="submit" class="btn btn-primary">Se connecter</button>
-        <a href="/register" >Pas encore inscrit ?</a>
+<#-- Message d'erreur -->
+    <#if error??>
+        <div style="color:red; margin-bottom: 15px;">
+            ${error}
+        </div>
+    </#if>
+
+    <form method="post" action="/login">
+
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" required />
+        <br/>
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required />
+        <br/>
+
+        <button type="submit">Se connecter</button>
     </form>
+
+    <p>
+        Pas encore de compte ? <a href="/register">S'inscrire</a>
+    </p>
+
 </@layout.block>

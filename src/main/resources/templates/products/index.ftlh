@@ -17,7 +17,7 @@
         <#list products as art>
             <tr>
                 <td>
-                    <img src="/images/${art.imageUrl}" alt="${art.title}" style="width:80px;height:auto;">
+                    <img src="/uploads/images/${art.imageUrl}" alt="${art.title}" style="width:80px;height:auto;">
                 </td>
                 <td>${art.title}</td>
                 <td>${art.artist}</td>

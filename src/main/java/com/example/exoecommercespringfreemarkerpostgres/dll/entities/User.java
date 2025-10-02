@@ -1,6 +1,8 @@
 package com.example.exoecommercespringfreemarkerpostgres.dll.entities;
 import com.example.exoecommercespringfreemarkerpostgres.dll.enums.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +27,7 @@ public class User extends BaseEntity<Long> implements UserDetails {
 
     @Column(unique = true, nullable = false,length = 50)
     private String username;
+
 
     @Column(nullable = false)
     private String password;
