@@ -2,6 +2,7 @@ package com.example.exoecommercespringfreemarkerpostgres.il.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -11,12 +12,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-
     }
 
     @Bean
@@ -24,31 +25,27 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(r -> r
-                        .requestMatchers(
-                                "/",                 // Page d'accueil
-                                "/about",            // Page à propos
-                                "/styles/**",        // Fichiers CSS
-                                "/scripts/**"        // JS
-                        ).permitAll()
-                        .requestMatchers(
-                                "/login",
-                                "/register"
-                        ).anonymous()               // Autorisé uniquement pour utilisateurs non connectés
-                        .requestMatchers(
-                                "/logout"
-                        ).authenticated()           // Logout uniquement pour utilisateurs connectés
-                        .anyRequest().permitAll()   // Le reste est autorisé temporairement
+                .authorizeHttpRequests(auth -> auth
+                        // Pages publiques
+                        .requestMatchers("/", "/about", "/styles/**", "/scripts/**").permitAll()
+                        // Authentification (login/register) uniquement pour utilisateurs anonymes
+                        .requestMatchers("/login", "/register").anonymous()
+                        .requestMatchers("/logout").authenticated()
+                        // CRUD ArtPiece → uniquement ADMIN
+                        .requestMatchers("/art/create", "/art/edit/**", "/art/delete/**")
+                        .hasRole("ADMIN")
+                        // Toutes les autres pages → utilisateur connecté
+                        .anyRequest().authenticated()
                 )
-                .formLogin(c -> c
+                .formLogin(form -> form
                         .loginPage("/login").permitAll()
-                        .defaultSuccessUrl("/", true)  // Redirection après login réussi
+                        .defaultSuccessUrl("/art/", true)
                 )
-                .logout(c -> c
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
-                        .logoutSuccessUrl("/login")  // Redirection après logout
+                        .logoutSuccessUrl("/login")
                 );
 
         return http.build();
