@@ -7,6 +7,7 @@ import com.example.exoecommercespringfreemarkerpostgres.dll.enums.UserRole;
 import com.example.exoecommercespringfreemarkerpostgres.pl.models.user.RegisterForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -81,5 +82,22 @@ public class UserController {
         }
 
         return "auth/login";
+    }
+
+    @GetMapping("/profil")
+    public String profil(Authentication authentication, Model model) {
+        if (authentication == null) {
+            return "redirect:/login";
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        model.addAttribute("user", user);
+        model.addAttribute("username", username);
+        model.addAttribute("roles", authentication.getAuthorities());
+
+        return "auth/profil";
     }
 }

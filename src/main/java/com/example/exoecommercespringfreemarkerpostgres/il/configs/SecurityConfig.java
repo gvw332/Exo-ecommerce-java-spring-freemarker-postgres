@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/about", "/styles/**", "/scripts/**", "/login", "/register").permitAll()
                         .requestMatchers("/login", "/register").anonymous()
                         .requestMatchers("/logout").authenticated()
+                        .requestMatchers("/logout", "/profil").authenticated()
                         .requestMatchers("/art/").authenticated()
                         .requestMatchers("/art/create", "/art/edit/**", "/art/delete/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

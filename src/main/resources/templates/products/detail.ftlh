@@ -5,7 +5,7 @@
 
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-16">
                 <img src="/uploads/images/${art.imageUrl}" class="img-fluid rounded-start" alt="${art.title}">
             </div>
             <div class="col-md-8">

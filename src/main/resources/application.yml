@@ -6,6 +6,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
+      # attention !!!!!! si je fais "create" ca va réinitialiser la bdd
+
       ddl-auto: update
     #   afficher sql
     show-sql: true
