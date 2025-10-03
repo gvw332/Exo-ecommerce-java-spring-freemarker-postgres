@@ -1,3 +1,41 @@
+/* Navbar avec transition smooth */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-hidden {
+    transform: translateY(-100%);
+}
+/* Centrage parfait des liens de navigation */
+.navbar .navbar-collapse {
+    position: relative;
+}
+
+.navbar-nav.mx-auto {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Sur mobile, retour au comportement normal */
+@media (max-width: 991px) {
+    .navbar-nav.mx-auto {
+        position: static;
+        transform: none;
+    }
+}
+
+/* Padding au body pour compenser la navbar fixe */
+body {
+    padding-top: 56px;
+}
+
+
 .img-container {
     height: 250px;
     display: flex;

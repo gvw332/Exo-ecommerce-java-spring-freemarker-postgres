@@ -29,9 +29,21 @@
                                 <input type="text" id="username" name="username" class="form-control" required>
                             </div>
 
+                            <!-- Champ Mot de passe -->
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mot de passe</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
+                                <div class="input-group">
+                                    <input
+                                            type="password"
+                                            id="password"
+                                            name="password"
+                                            class="form-control"
+                                            required
+                                    >
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
+                                        <i class="bi bi-eye" id="password-icon"></i>
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="d-grid">
@@ -50,5 +62,20 @@
             </div>
         </div>
     </div>
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
 
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+    </script>
 </@layout.block>

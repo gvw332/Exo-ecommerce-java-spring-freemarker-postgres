@@ -9,9 +9,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    boolean existsByUsername(String username); // ✅ Ajoute cette ligne
+    boolean existsByEmail(String email);
+
     @Query("select u from User u where u.username ilike :username")
     Optional<User> findByUsername(String username);
 
-    boolean existsByUsername(String username); // ✅ Ajoute cette ligne
 
 }

@@ -22,12 +22,13 @@ import java.util.List;
 @Table(name = "USER_")
 @Builder
 
-
 public class User extends BaseEntity<Long> implements UserDetails {
 
-    @Column(unique = true, nullable = false,length = 50)
+    @Column(unique = true, nullable = false, length = 50)
     private String username;
 
+    @Column(unique = true, nullable = false, length = 100)
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -40,6 +41,7 @@ public class User extends BaseEntity<Long> implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
+
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

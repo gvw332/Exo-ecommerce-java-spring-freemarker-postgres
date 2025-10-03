@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("registerForm", new RegisterForm("", ""));
+        model.addAttribute("registerForm", new RegisterForm("", "", "", ""));
         return "auth/register";
     }
 
@@ -35,19 +35,34 @@ public class UserController {
             @Valid @ModelAttribute("registerForm") RegisterForm registerForm,
             BindingResult bindingResult,
             Model model
-        ){
+    ){
         // Vérification des erreurs de validation
         if(bindingResult.hasErrors()){
             model.addAttribute("registerForm", registerForm);
-            model.addAttribute("bindingResult", bindingResult); // AJOUT IMPORTANT
+            model.addAttribute("bindingResult", bindingResult);
+            return "auth/register";
+        }
+
+        // Vérifier si les mots de passe correspondent
+        if(!registerForm.password().equals(registerForm.confirmPassword())){
+            model.addAttribute("registerForm", registerForm);
+            model.addAttribute("passwordMismatch", true);
             return "auth/register";
         }
 
         // Vérifier si le nom d'utilisateur existe déjà
         if(userRepository.existsByUsername(registerForm.username())){
             bindingResult.rejectValue("username", "error.username", "Ce nom d'utilisateur existe déjà.");
-            model.addAttribute("registerForm", registerForm); // AJOUT
-            model.addAttribute("bindingResult", bindingResult); // AJOUT
+            model.addAttribute("registerForm", registerForm);
+            model.addAttribute("bindingResult", bindingResult);
+            return "auth/register";
+        }
+
+        // Vérifier si l'email existe déjà
+        if(userRepository.existsByEmail(registerForm.email())){
+            bindingResult.rejectValue("email", "error.email", "Cet email est déjà utilisé.");
+            model.addAttribute("registerForm", registerForm);
+            model.addAttribute("bindingResult", bindingResult);
             return "auth/register";
         }
 
@@ -57,6 +72,7 @@ public class UserController {
         // Création de l'utilisateur
         User user = User.builder()
                 .username(registerForm.username())
+                .email(registerForm.email())
                 .password(hashedPassword)
                 .role(UserRole.USER)
                 .build();

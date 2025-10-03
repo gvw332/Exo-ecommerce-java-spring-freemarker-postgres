@@ -7,7 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.Map;
 import java.util.List;
 
 @Controller
@@ -29,14 +30,20 @@ public class CartController {
         return "cart/view";
     }
 
+
     @PostMapping("/add/{artPieceId}")
     public String addToCart(@PathVariable Long artPieceId,
                             @RequestParam(defaultValue = "1") Integer quantity,
-                            Authentication authentication) {
+                            Authentication authentication,
+                            @RequestHeader(value = "Referer", required = false) String referer) {
         cartService.addToCart(authentication.getName(), artPieceId, quantity);
-        return "redirect:/cart";
-    }
 
+        // Rediriger vers la page précédente si disponible
+        if (referer != null && !referer.isEmpty()) {
+            return "redirect:" + referer.replace(referer.split("://")[0] + "://" + referer.split("/")[2], "");
+        }
+        return "redirect:/art/";
+    }
     @PostMapping("/update/{cartItemId}")
     public String updateQuantity(@PathVariable Long cartItemId,
                                  @RequestParam Integer quantity) {
@@ -55,4 +62,24 @@ public class CartController {
         cartService.clearCart(authentication.getName());
         return "redirect:/cart";
     }
+
+    @GetMapping("/count")
+    @ResponseBody
+    public Map<String, Integer> getCartCount(Authentication authentication) {
+        int count = cartService.getCartItemCount(authentication.getName());
+        return Map.of("count", count);
+    }
+
+    @GetMapping("/content")
+    public String getCartContent(Authentication authentication, Model model) {
+        String username = authentication.getName();
+        List<CartItem> cartItems = cartService.getCartItems(username);
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("total", cartService.getCartTotal(username));
+
+        return "cart/content";
+    }
+
+
 }

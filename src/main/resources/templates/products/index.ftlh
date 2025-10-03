@@ -25,7 +25,7 @@
                         <div class="mt-auto text-end">
                             <a href="/art/${art.id}" class="btn btn-sm btn-primary">Détails</a>
 
-                            <form action="/cart/add/${art.id}" method="post" class="d-inline">
+                            <form action="/cart/add/${art.id}" method="post" class="d-inline" onsubmit="setTimeout(updateCartCount, 500)">
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-sm btn-success">🛒 Ajouter</button>
                             </form>

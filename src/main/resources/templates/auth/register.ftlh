@@ -29,21 +29,66 @@
                                 </#if>
                             </div>
 
+                            <!-- Champ Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        class="form-control <#if bindingResult?? && bindingResult.hasFieldErrors("email")>is-invalid</#if>"
+                                        value="${registerForm.email()!""}"
+                                        required
+                                >
+                                <#if bindingResult?? && bindingResult.hasFieldErrors("email")>
+                                    <div class="invalid-feedback">
+                                        ${bindingResult.getFieldError("email").defaultMessage}
+                                    </div>
+                                </#if>
+                            </div>
+
                             <!-- Champ Mot de passe -->
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mot de passe</label>
-                                <input
-                                        type="password"
-                                        id="password"
-                                        name="password"
-                                        class="form-control <#if bindingResult?? && bindingResult.hasFieldErrors("password")>is-invalid</#if>"
-                                        required
-                                >
-                                <#if bindingResult?? && bindingResult.hasFieldErrors("password")>
-                                    <div class="invalid-feedback">
-                                        ${bindingResult.getFieldError("password").defaultMessage}
-                                    </div>
-                                </#if>
+                                <div class="input-group">
+                                    <input
+                                            type="password"
+                                            id="password"
+                                            name="password"
+                                            class="form-control <#if bindingResult?? && bindingResult.hasFieldErrors("password")>is-invalid</#if>"
+                                            required
+                                    >
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
+                                        <i class="bi bi-eye" id="password-icon"></i>
+                                    </button>
+                                    <#if bindingResult?? && bindingResult.hasFieldErrors("password")>
+                                        <div class="invalid-feedback">
+                                            ${bindingResult.getFieldError("password").defaultMessage}
+                                        </div>
+                                    </#if>
+                                </div>
+                            </div>
+
+                            <!-- Champ Confirmation du mot de passe -->
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+                                <div class="input-group">
+                                    <input
+                                            type="password"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            class="form-control <#if passwordMismatch??>is-invalid</#if>"
+                                            required
+                                    >
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPassword')">
+                                        <i class="bi bi-eye" id="confirmPassword-icon"></i>
+                                    </button>
+                                    <#if passwordMismatch??>
+                                        <div class="invalid-feedback">
+                                            Les mots de passe ne correspondent pas
+                                        </div>
+                                    </#if>
+                                </div>
                             </div>
 
                             <!-- Bouton s'inscrire -->
@@ -65,5 +110,20 @@
             </div>
         </div>
     </div>
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(inputId + '-icon');
 
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+    </script>
 </@layout.block>

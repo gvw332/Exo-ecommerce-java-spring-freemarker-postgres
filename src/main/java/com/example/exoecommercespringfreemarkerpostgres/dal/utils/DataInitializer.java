@@ -21,6 +21,7 @@ public class DataInitializer {
             if (userRepository.count() == 0) {
                 userRepository.save(User.builder()
                         .username("admin")
+                        .email("admin@example.com")
                         .password(passwordEncoder.encode("admin123"))
                         .role(UserRole.ADMIN)
                         .build()
@@ -28,6 +29,7 @@ public class DataInitializer {
 
                 userRepository.save(User.builder()
                         .username("user")
+                        .email("user@example.com")
                         .password(passwordEncoder.encode("user123"))
                         .role(UserRole.USER)
                         .build()
