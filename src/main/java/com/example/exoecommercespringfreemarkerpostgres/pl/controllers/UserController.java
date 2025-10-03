@@ -35,8 +35,7 @@ public class UserController {
             @Valid @ModelAttribute("registerForm") RegisterForm registerForm,
             BindingResult bindingResult,
             Model model
-    ){
-
+        ){
         // Vérification des erreurs de validation
         if(bindingResult.hasErrors()){
             model.addAttribute("registerForm", registerForm);

@@ -1,14 +1,7 @@
 <#import "../layouts/main.ftlh" as layout>
 
 <@layout.block title="Ajouter un tableau">
-    <p>${username}</p>
-    <p>Rôles ADMIN OU USER:</p>
-    <ul>
-        <#list roles as role>
-            <li>${role}</li>
-        </#list>
-    </ul>
-
+    <h1>Création </h1>
     <form action="/art/create" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">Titre</label>

@@ -3,8 +3,10 @@ package com.example.exoecommercespringfreemarkerpostgres.dll.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "cart_item")
+@Table(name = "cart_items")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,10 +19,18 @@ public class CartItem {
     private Long id;
 
     @ManyToOne
-    private ArtPiece artPiece;
-
-    private int quantity;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "art_piece_id", nullable = false)
+    private ArtPiece artPiece;
+
+    @Column(nullable = false)
+    private Integer quantity = 1;
+
+    // Méthode utile pour calculer le sous-total
+    public BigDecimal getSubtotal() {
+        return artPiece.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 }
