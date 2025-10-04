@@ -26,8 +26,8 @@ body {
     right: 0;
     z-index: 1030;
     transition: transform 0.3s ease-in-out;
-    background-color: var(--bordeaux-dark) !important;
-    box-shadow: 0 2px 10px rgba(93, 0, 30, 0.3);
+    background-color: #1a1a1a !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar-hidden {
@@ -38,26 +38,107 @@ body {
     font-family: 'Georgia', serif;
     font-weight: bold;
     letter-spacing: 1px;
-    color: var(--cream) !important;
+    color: #FFD700 !important; /* Or pour contraster avec le noir */
 }
 
 .nav-link {
-    color: var(--beige) !important;
+    color: #e0e0e0 !important;
     transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-    color: var(--cream) !important;
+    color: #FFD700 !important; /* Or au survol */
 }
 
 .btn-link.nav-link {
-    color: var(--beige) !important;
+    color: #e0e0e0 !important;
+}
+
+.btn-link.nav-link:hover {
+    color: #FFD700 !important;
 }
 
 .badge.bg-danger {
-    background-color: var(--bordeaux) !important;
+    background-color: #dc3545 !important; /* Rouge pour le badge du panier */
+}
+/* Navbar fixée à 100px exactement */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    transition: transform 0.3s ease-in-out;
+    background-color: #1a1a1a !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    height: 80px !important; /* Hauteur fixe exacte */
+    min-height: 80px !important;
+    padding: 0 !important; /* Enlève tous les paddings */
 }
 
+/* Container de la navbar sans padding vertical */
+.navbar .container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Logo qui prend toute la hauteur */
+.navbar-brand {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 5px 0; /* Petit padding pour pas coller aux bords */
+}
+
+.navbar-logo {
+    height: 160px; /* Presque toute la hauteur de la navbar */
+    width: auto;
+    transition: transform 0.3s ease;
+    object-fit: contain;
+}
+
+.navbar-logo:hover {
+    transform: scale(1.05);
+}
+
+/* Padding du body */
+body {
+    padding-top: 100px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .navbar {
+        height: 80px !important;
+        min-height: 80px !important;
+    }
+
+    .navbar-logo {
+        height: 70px;
+    }
+
+    body {
+        padding-top: 80px;
+    }
+}
+/* Centre verticalement le contenu de la navbar */
+.navbar .container {
+    align-items: center;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .navbar {
+        min-height: 60px;
+    }
+
+    .navbar-logo {
+        height: 45px;
+    }
+}
 /* Centrage parfait des liens de navigation */
 .navbar .navbar-collapse {
     position: relative;
@@ -152,25 +233,67 @@ body {
     width: auto;
     object-fit: contain;
 }
+/* === Bouton Quick Add sur les cards === */
+.product-card {
+    position: relative;
+}
 
+.quick-add-form {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.btn-quick-add {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--bordeaux);
+    color: white;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-quick-add:hover {
+    background-color: var(--bordeaux-dark);
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 15px rgba(139, 21, 56, 0.5);
+}
+
+.btn-quick-add:active {
+    transform: scale(0.95) rotate(90deg);
+}
+
+/* Éviter que le lien de la card interfère avec le bouton */
+.product-card a {
+    display: block;
+    height: calc(100% - 55px); /* Laisse de l'espace pour le bouton */
+}
 /* === Hero Section === */
 .hero-section {
-    background: linear-gradient(rgba(93, 0, 30, 0.7), rgba(139, 21, 56, 0.7)),
-    var(--bordeaux-dark);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('/images/hero-section.jpg') center/cover no-repeat;
     min-height: 450px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cream);
+    color: white;
     margin: -2rem 0 3rem 0;
     padding: 80px 20px;
 }
 
 .hero-section h1 {
     font-family: 'Georgia', serif;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .hero-section .btn {
@@ -292,4 +415,83 @@ h1, h2, h3, h4, h5, h6 {
 .form-label {
     color: var(--text-dark);
     font-weight: 500;
+}
+
+
+/* === Pagination === */
+.pagination {
+    margin-top: 2rem;
+}
+
+.pagination .page-link {
+    color: var(--bordeaux);
+    border-color: var(--beige-dark);
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    color: var(--bordeaux-dark);
+    background-color: var(--beige);
+    border-color: var(--bordeaux);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--bordeaux);
+    border-color: var(--bordeaux);
+    color: var(--cream);
+    font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: var(--text-muted);
+    background-color: var(--beige);
+}
+
+/* === Barre de recherche === */
+.input-group .form-control:focus {
+    border-color: var(--bordeaux);
+    box-shadow: 0 0 0 0.25rem rgba(139, 21, 56, 0.25);
+    z-index: 3;
+}
+
+.input-group .btn:focus {
+    z-index: 3;
+}
+
+
+/* === Page About === */
+.value-card {
+    background-color: var(--cream);
+    border: 2px solid var(--beige-dark);
+    border-radius: 8px;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.value-card:hover {
+    border-color: var(--bordeaux-light);
+    box-shadow: 0 5px 20px rgba(139, 21, 56, 0.15);
+    transform: translateY(-5px);
+}
+
+.process-step {
+    position: relative;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background-color: var(--bordeaux);
+    color: var(--cream);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.engagement-list i {
+    flex-shrink: 0;
 }

@@ -1,17 +1,20 @@
 package com.example.exoecommercespringfreemarkerpostgres.pl.controllers;
+
 import java.math.BigDecimal;
 import com.example.exoecommercespringfreemarkerpostgres.bll.services.FileStorageService;
 import com.example.exoecommercespringfreemarkerpostgres.dal.repositories.ArtPieceRepository;
 import com.example.exoecommercespringfreemarkerpostgres.dll.entities.ArtPiece;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/art")
@@ -25,12 +28,32 @@ public class ProductController {
         this.fileStorageService = fileStorageService;
     }
 
-    // --- Liste des tableaux (accessible à tous)
+    // --- Liste des tableaux avec pagination et recherche
     @GetMapping("/")
-    public String index(Model model, Authentication authentication) {
-        model.addAttribute("products", artPieceRepository.findAll());
+    public String index(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(required = false) String search,
+            Model model,
+            Authentication authentication
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<ArtPiece> artPiecesPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            artPiecesPage = artPieceRepository.searchArtPieces(search.trim(), pageable);
+            model.addAttribute("search", search);
+        } else {
+            artPiecesPage = artPieceRepository.findAll(pageable);
+        }
+
+        model.addAttribute("products", artPiecesPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", artPiecesPage.getTotalPages());
+        model.addAttribute("totalItems", artPiecesPage.getTotalElements());
         model.addAttribute("username", authentication != null ? authentication.getName() : null);
         model.addAttribute("roles", authentication != null ? authentication.getAuthorities() : null);
+
         return "products/index";
     }
 
@@ -152,8 +175,6 @@ public class ProductController {
             return "products/edit";
         }
     }
-
-
 
     // --- Supprimer un tableau (ADMIN uniquement)
     @PreAuthorize("hasRole('ADMIN')")

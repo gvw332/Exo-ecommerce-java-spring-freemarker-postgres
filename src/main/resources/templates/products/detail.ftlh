@@ -3,11 +3,12 @@
 <@layout.block title="${art.title}">
     <h2>Détail</h2>
 
-
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-32">
-                <img src="/uploads/images/${art.imageUrl}" class="img-fluid rounded-start" alt="${art.title}">
+                <img src="<#if art.imageUrl?starts_with('http')>${art.imageUrl}<#else>/uploads/images/${art.imageUrl}</#if>"
+                     alt="${art.title}"
+                     class="img-fluid">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -16,26 +17,28 @@
                     <p class="card-text"><strong>Description:</strong> ${art.description}</p>
                     <p class="card-text"><strong>Prix:</strong> ${art.price?string["0.00"]} €</p>
 
-                    <#if isAdmin>
+                    <!-- Bouton panier pour TOUS les utilisateurs authentifiés -->
+                    <#if isAuthenticated>
                         <form action="/cart/add/${art.id}" method="post" class="mb-3" onsubmit="setTimeout(updateCartCount, 500)">
                             <div class="input-group" style="max-width: 200px;">
                                 <input type="number" name="quantity" value="1" min="1" class="form-control">
                                 <button type="submit" class="btn btn-success">Ajouter au panier</button>
                             </div>
                         </form>
+                    </#if>
+
+                    <!-- Boutons admin uniquement -->
+                    <#if isAdmin>
                         <a href="/art/edit/${art.id}" class="btn btn-warning">Modifier</a>
                         <form action="/art/delete/${art.id}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer ce tableau ?')">
                                 Supprimer
                             </button>
                         </form>
-
                     </#if>
 
                     <a href="/art/" class="btn btn-secondary text-center">Retour</a>
-
                 </div>
-
             </div>
         </div>
     </div>

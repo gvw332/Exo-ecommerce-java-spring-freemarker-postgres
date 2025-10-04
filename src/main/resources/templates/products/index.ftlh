@@ -1,59 +1,125 @@
 <#import "../layouts/main.ftlh" as layout>
 
-<@layout.block title="Liste de nos tableaux d'art">
+<@layout.block title="Galerie d'Art">
 
-<#-- Bouton Ajouter uniquement pour les admins -->
-    <#if isAdmin>
-        <div class="text-center mt-4 mb-4">
-            <a href="/art/create" class="btn btn-success">➕ Ajouter un tableau</a>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Galerie d'Art</h1>
+            <#if roles?? && roles?seq_contains("ROLE_ADMIN")>
+                <a href="/art/create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Ajouter une œuvre
+                </a>
+            </#if>
         </div>
-    </#if>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <#list products as art>
-            <div class="col">
-                <div class="card h-100 d-flex flex-column shadow-sm hover-shadow">
-                    <div class="img-container">
-                        <img src="/uploads/images/${art.imageUrl}" class="card-img-top" alt="${art.title}">
+        <!-- Barre de recherche -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <form method="get" action="/art/">
+                    <div class="input-group">
+                        <input
+                                type="text"
+                                name="search"
+                                class="form-control"
+                                placeholder="Rechercher par titre ou artiste..."
+                                value="${search!''}"
+                        >
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                        <#if search??>
+                            <a href="/art/" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        </#if>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${art.title}</h5>
-                        <h6 class="card-subtitle text-muted mb-2">Par ${art.artist}</h6>
-                        <p class="card-text">${art.description}</p>
-                        <p class="card-text fw-bold">${art.price?string["0.00"]} €</p>
+                </form>
+            </div>
+        </div>
 
-                        <div class="mt-auto text-end">
-                            <a href="/art/${art.id}" class="btn btn-sm btn-primary">Détails</a>
+        <!-- Résultats -->
+        <#if search??>
+            <p class="text-muted mb-3">
+                ${totalItems} résultat<#if totalItems gt 1>s</#if> pour "${search}"
+            </p>
+        </#if>
 
-                            <form action="/cart/add/${art.id}" method="post" class="d-inline" onsubmit="setTimeout(updateCartCount, 500)">
+        <!-- Grille de tableaux -->
+        <div class="row g-4 mb-4">
+            <#list products as art>
+                <div class="col-md-4 col-lg-3">
+                    <div class="card h-100 product-card">
+                        <a href="/art/${art.id}" class="text-decoration-none">
+                            <div class="img-container">
+                                <img src="<#if art.imageUrl?starts_with('http')>${art.imageUrl}<#else>/uploads/images/${art.imageUrl}</#if>"
+                                     alt="${art.title}"
+                                     class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${art.title}</h5>
+                                <p class="card-text text-muted small">${art.artist}</p>
+                                <p class="card-text fw-bold">${art.price} €</p>
+                            </div>
+                        </a>
+
+                        <!-- Bouton + pour ajouter au panier -->
+                        <#if isAuthenticated>
+                            <form action="/cart/add/${art.id}" method="post" class="quick-add-form" onsubmit="setTimeout(updateCartCount, 500)">
                                 <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="btn btn-sm btn-success">🛒 Ajouter</button>
+                                <button type="submit" class="btn-quick-add" title="Ajouter au panier">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
                             </form>
-
-                            <#if isAdmin>
-                                <a href="/art/edit/${art.id}" class="btn btn-sm btn-warning">Modifier</a>
-                                <form action="/art/delete/${art.id}" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Supprimer ce tableau ?')">
-                                        Supprimer
-                                    </button>
-                                </form>
-                            </#if>
-                        </div>
+                        </#if>
                     </div>
                 </div>
-            </div>
-        <#else>
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    <h4>Aucun tableau disponible pour le moment</h4>
-                    <p>Notre galerie est en cours de constitution.</p>
-                    <#if isAdmin>
-                        <a href="/art/create" class="btn btn-primary mt-2">Ajouter le premier tableau</a>
-                    </#if>
+            <#else>
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <#if search??>
+                            Aucun résultat trouvé pour "${search}"
+                        <#else>
+                            Aucun tableau disponible pour le moment.
+                        </#if>
+                    </div>
                 </div>
-            </div>
-        </#list>
+            </#list>
+        </div>
+
+        <!-- Pagination -->
+        <#if totalPages gt 1>
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <#if currentPage == 0>disabled</#if>">
+                        <a class="page-link" href="?page=${currentPage - 1}<#if search??>&search=${search}</#if>">
+                            Précédent
+                        </a>
+                    </li>
+
+                    <#list 0..<totalPages as pageNum>
+                        <#if (pageNum == 0) ||
+                        (pageNum == totalPages - 1) ||
+                        (pageNum >= currentPage - 2 && pageNum <= currentPage + 2)>
+                            <li class="page-item <#if pageNum == currentPage>active</#if>">
+                                <a class="page-link" href="?page=${pageNum}<#if search??>&search=${search}</#if>">
+                                    ${pageNum + 1}
+                                </a>
+                            </li>
+                        <#elseif (pageNum == currentPage - 3) || (pageNum == currentPage + 3)>
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        </#if>
+                    </#list>
+
+                    <li class="page-item <#if currentPage == totalPages - 1>disabled</#if>">
+                        <a class="page-link" href="?page=${currentPage + 1}<#if search??>&search=${search}</#if>">
+                            Suivant
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </#if>
     </div>
 
 </@layout.block>
