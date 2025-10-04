@@ -22,30 +22,34 @@ public class CartService {
     private final ArtPieceRepository artPieceRepository;
     private final UserRepository userRepository;
 
+    // Méthode helper pour trouver l'utilisateur
+    private User findUser(String identifier) {
+        Optional<User> userOpt = userRepository.findByUsername(identifier);
+        if (userOpt.isEmpty()) {
+            userOpt = userRepository.findByEmail(identifier);
+        }
+        return userOpt.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    }
+
     public List<CartItem> getCartItems(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        User user = findUser(username);
         return cartItemRepository.findByUser(user);
     }
 
     @Transactional
     public void addToCart(String username, Long artPieceId, Integer quantity) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        User user = findUser(username);
 
         ArtPiece artPiece = artPieceRepository.findById(artPieceId)
                 .orElseThrow(() -> new RuntimeException("Tableau non trouvé"));
 
-        // Vérifier si l'article existe déjà dans le panier
         Optional<CartItem> existingItem = cartItemRepository.findByUserAndArtPieceId(user, artPieceId);
 
         if (existingItem.isPresent()) {
-            // Augmenter la quantité
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() + quantity);
             cartItemRepository.save(item);
         } else {
-            // Créer un nouvel article
             CartItem newItem = CartItem.builder()
                     .user(user)
                     .artPiece(artPiece)
@@ -75,8 +79,7 @@ public class CartService {
 
     @Transactional
     public void clearCart(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        User user = findUser(username);
         cartItemRepository.deleteByUser(user);
     }
 

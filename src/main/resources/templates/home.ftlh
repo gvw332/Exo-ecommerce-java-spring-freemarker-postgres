@@ -2,62 +2,71 @@
 
 <@layout.block title="Accueil - Galerie d'Art">
 
-    <div class="text-center mb-5">
-        <h1 class="display-4 mb-3">Bienvenue dans notre Galerie d'Art</h1>
-        <p class="lead text-muted">Découvrez des œuvres d'art exceptionnelles de grands maîtres</p>
-    </div>
-
-    <div class="row mb-5">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="card-title">🎨 Collection Unique</h3>
-                    <p class="card-text">Des tableaux soigneusement sélectionnés parmi les plus grands artistes de l'histoire.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="card-title">🔒 Sécurisé</h3>
-                    <p class="card-text">Vos informations sont protégées et vos transactions sont sécurisées.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3 class="card-title">✨ Qualité Premium</h3>
-                    <p class="card-text">Chaque œuvre est authentifiée et livrée avec un certificat d'authenticité.</p>
-                </div>
-            </div>
+    <!-- Hero Section -->
+    <div class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-3 mb-4">Galerie d'Art Classique</h1>
+            <p class="lead mb-4">Une sélection raffinée d'œuvres des grands maîtres</p>
+            <a href="/art/" class="btn btn-lg">Découvrir la Collection</a>
         </div>
     </div>
 
-    <div class="text-center mb-5">
-        <h2 class="mb-4">Explorez notre collection</h2>
-        <p class="mb-4">Parcourez notre sélection de tableaux d'art disponibles à l'achat</p>
-        <a href="/art/" class="btn btn-primary btn-lg">Voir la galerie</a>
+    <!-- Features -->
+    <div class="container my-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-box text-center">
+                    <h4>Œuvres Authentiques</h4>
+                    <p class="text-muted">Reproductions de haute qualité certifiées et numérotées</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box text-center">
+                    <h4>Expertise Artistique</h4>
+                    <p class="text-muted">Sélection rigoureuse par nos historiens d'art</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box text-center">
+                    <h4>Livraison Soignée</h4>
+                    <p class="text-muted">Emballage professionnel et assurance incluse</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-light p-5 rounded">
-        <h2 class="text-center mb-4">Pourquoi nous choisir ?</h2>
-        <div class="row">
+    <div class="section-divider"></div>
+
+    <!-- About Section -->
+    <div class="container my-5 py-4">
+        <div class="row align-items-center">
             <div class="col-md-6">
-                <ul class="list-unstyled">
-                    <li class="mb-3">✓ Large sélection d'œuvres d'art</li>
-                    <li class="mb-3">✓ Prix compétitifs</li>
-                    <li class="mb-3">✓ Service client dédié</li>
-                </ul>
+                <h2 class="mb-4">L'Art au Cœur de Votre Intérieur</h2>
+                <p class="lead text-muted">Depuis plus de deux décennies, nous rendons accessible l'art des grands maîtres.</p>
+                <p>Notre galerie propose des reproductions fidèles d'œuvres emblématiques, de la Renaissance aux mouvements modernes. Chaque pièce est imprimée sur des supports de qualité musée et accompagnée d'un certificat d'authenticité.</p>
+                <a href="/about" class="btn btn-outline-primary mt-3">Notre Histoire</a>
             </div>
             <div class="col-md-6">
-                <ul class="list-unstyled">
-                    <li class="mb-3">✓ Livraison sécurisée</li>
-                    <li class="mb-3">✓ Garantie d'authenticité</li>
-                    <li class="mb-3">✓ Paiement sécurisé</li>
-                </ul>
+                <div class="p-5 text-center" style="background-color: var(--cream); border: 2px solid var(--beige-dark); border-radius: 8px;">
+                    <h3 class="mb-4">Nos Garanties</h3>
+                    <ul class="list-unstyled text-start">
+                        <li class="mb-3"><strong>Qualité Musée</strong> - Impression giclée sur toile</li>
+                        <li class="mb-3"><strong>Retour 30 jours</strong> - Satisfait ou remboursé</li>
+                        <li class="mb-3"><strong>Encadrement sur mesure</strong> - Options disponibles</li>
+                        <li class="mb-3"><strong>Livraison assurée</strong> - Suivi et protection</li>
+                    </ul>
+                </div>
             </div>
         </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- CTA -->
+    <div class="container text-center my-5 py-5">
+        <h2 class="mb-4">Parcourez Notre Collection</h2>
+        <p class="lead text-muted mb-4">De Van Gogh à Da Vinci, trouvez l'œuvre qui sublimera votre espace</p>
+        <a href="/art/" class="btn btn-primary btn-lg px-5">Voir la Galerie</a>
     </div>
 
 </@layout.block>

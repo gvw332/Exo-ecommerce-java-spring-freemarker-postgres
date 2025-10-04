@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -105,12 +107,21 @@ public class UserController {
             return "redirect:/login";
         }
 
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        String identifier = authentication.getName();
+        User user;
+
+        // Essayer de trouver par username d'abord
+        Optional<User> userOpt = userRepository.findByUsername(identifier);
+
+        if (userOpt.isEmpty()) {
+            // Si pas trouvé, essayer par email (pour OAuth2)
+            userOpt = userRepository.findByEmail(identifier);
+        }
+
+        user = userOpt.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
         model.addAttribute("user", user);
-        model.addAttribute("username", username);
+        model.addAttribute("username", user.getUsername());
         model.addAttribute("roles", authentication.getAuthorities());
 
         return "auth/profil";

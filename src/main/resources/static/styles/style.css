@@ -1,4 +1,24 @@
-/* Navbar avec transition smooth */
+/* === Palette de couleurs === */
+:root {
+    --bordeaux-dark: #5d001e;
+    --bordeaux: #8b1538;
+    --bordeaux-light: #a5325f;
+    --beige: #f5f0e8;
+    --beige-dark: #e8dfd3;
+    --cream: #fffef2;
+    --text-dark: #2c2424;
+    --text-muted: #6b5d5d;
+}
+
+/* === Body === */
+body {
+    background-color: var(--beige);
+    color: var(--text-dark);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    padding-top: 56px;
+}
+
+/* === Navbar === */
 .navbar {
     position: fixed;
     top: 0;
@@ -6,11 +26,38 @@
     right: 0;
     z-index: 1030;
     transition: transform 0.3s ease-in-out;
+    background-color: var(--bordeaux-dark) !important;
+    box-shadow: 0 2px 10px rgba(93, 0, 30, 0.3);
 }
 
 .navbar-hidden {
     transform: translateY(-100%);
 }
+
+.navbar-brand {
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: var(--cream) !important;
+}
+
+.nav-link {
+    color: var(--beige) !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--cream) !important;
+}
+
+.btn-link.nav-link {
+    color: var(--beige) !important;
+}
+
+.badge.bg-danger {
+    background-color: var(--bordeaux) !important;
+}
+
 /* Centrage parfait des liens de navigation */
 .navbar .navbar-collapse {
     position: relative;
@@ -30,19 +77,74 @@
     }
 }
 
-/* Padding au body pour compenser la navbar fixe */
-body {
-    padding-top: 56px;
+/* === Buttons === */
+.btn-primary {
+    background-color: var(--bordeaux);
+    border-color: var(--bordeaux);
+    color: var(--cream);
+    transition: all 0.3s ease;
 }
 
+.btn-primary:hover {
+    background-color: var(--bordeaux-dark);
+    border-color: var(--bordeaux-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 21, 56, 0.3);
+}
 
+.btn-outline-primary {
+    color: var(--bordeaux);
+    border-color: var(--bordeaux);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--bordeaux);
+    border-color: var(--bordeaux);
+    color: var(--cream);
+}
+
+.btn-success {
+    background-color: var(--bordeaux-light);
+    border-color: var(--bordeaux-light);
+}
+
+.btn-success:hover {
+    background-color: var(--bordeaux);
+    border-color: var(--bordeaux);
+}
+
+.btn-warning {
+    background-color: #c8963e;
+    border-color: #c8963e;
+}
+
+.btn-warning:hover {
+    background-color: #a77d32;
+    border-color: #a77d32;
+}
+
+/* === Cards === */
+.card {
+    background-color: var(--cream);
+    border: 1px solid var(--beige-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(93, 0, 30, 0.15);
+    cursor: pointer;
+}
+
+/* Images dans les cartes */
 .img-container {
     height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background-color: #f8f9fa;
+    background-color: var(--beige);
 }
 
 .img-container img {
@@ -51,13 +153,143 @@ body {
     object-fit: contain;
 }
 
-.card:hover {
-    transform: scale(1.02);
-    transition: transform 0.2s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    cursor: pointer;
+/* === Hero Section === */
+.hero-section {
+    background: linear-gradient(rgba(93, 0, 30, 0.7), rgba(139, 21, 56, 0.7)),
+    var(--bordeaux-dark);
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+    margin: -2rem 0 3rem 0;
+    padding: 80px 20px;
+}
+
+.hero-section h1 {
+    font-family: 'Georgia', serif;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section .btn {
+    background-color: var(--cream);
+    color: var(--bordeaux-dark);
+    border: none;
+    padding: 12px 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.hero-section .btn:hover {
+    background-color: var(--beige);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* === Feature Boxes === */
+.feature-box {
+    background-color: var(--cream);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 2px solid var(--beige-dark);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.feature-box:hover {
+    border-color: var(--bordeaux-light);
+    box-shadow: 0 5px 20px rgba(139, 21, 56, 0.15);
+}
+
+.feature-box h4 {
+    color: var(--bordeaux-dark);
+    font-family: 'Georgia', serif;
+    margin-bottom: 1rem;
+}
+
+/* === Section Dividers === */
+.section-divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--bordeaux-light), transparent);
+    margin: 3rem 0;
+}
+
+/* === Footer === */
+footer {
+    background-color: var(--bordeaux-dark) !important;
+    color: var(--beige) !important;
+}
+
+footer small {
+    color: var(--beige) !important;
+}
+
+/* === Links === */
+a {
+    color: var(--bordeaux);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--bordeaux-dark);
 }
 
 a.text-decoration-none:hover {
     text-decoration: none;
+}
+
+/* === Typography === */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Georgia', serif;
+    color: var(--text-dark);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* === Google Button === */
+.btn-google-custom {
+    background-color: white;
+    color: #3c4043;
+    border: 1px solid var(--beige-dark);
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.btn-google-custom:hover {
+    background-color: var(--beige);
+    border-color: var(--bordeaux-light);
+}
+
+/* === Tables === */
+.table {
+    background-color: var(--cream);
+}
+
+.table-dark {
+    background-color: var(--bordeaux-dark) !important;
+    color: var(--cream) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--beige);
+}
+
+/* === Forms === */
+.form-control:focus {
+    border-color: var(--bordeaux-light);
+    box-shadow: 0 0 0 0.25rem rgba(139, 21, 56, 0.15);
+}
+
+.form-label {
+    color: var(--text-dark);
+    font-weight: 500;
 }

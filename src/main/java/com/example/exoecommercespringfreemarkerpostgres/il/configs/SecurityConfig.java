@@ -1,11 +1,10 @@
 package com.example.exoecommercespringfreemarkerpostgres.il.configs;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.exoecommercespringfreemarkerpostgres.bll.services.CustomOAuth2UserService;
+import com.example.exoecommercespringfreemarkerpostgres.bll.services.CustomOAuth2User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,14 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,11 +41,10 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error", "/error/**", "/access-denied", "/uploads/**").permitAll()
+                        .requestMatchers("/error", "/error/**", "/access-denied", "/images/**").permitAll()
                         .requestMatchers("/", "/about", "/styles/**", "/scripts/**", "/login", "/register").permitAll()
                         .requestMatchers("/login", "/register").anonymous()
-                        .requestMatchers("/logout").authenticated()
-                        .requestMatchers("/logout", "/profil").authenticated()
+                        .requestMatchers("/logout", "/profil", "/cart", "/cart/**").authenticated()
                         .requestMatchers("/art/").authenticated()
                         .requestMatchers("/art/create", "/art/edit/**", "/art/delete/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -56,11 +54,18 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/art/", true)
                         .failureUrl("/login?error")
                 )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)  // Le SERVICE injecté
+                        )
+                        .defaultSuccessUrl("/art/", true)
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/login?logout")
                 )
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler())

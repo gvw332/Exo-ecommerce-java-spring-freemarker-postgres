@@ -44,8 +44,14 @@
                 </div>
             </div>
         <#else>
-            <div class="col-12 text-center text-muted">
-                Aucun tableau trouvé
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h4>Aucun tableau disponible pour le moment</h4>
+                    <p>Notre galerie est en cours de constitution.</p>
+                    <#if isAdmin>
+                        <a href="/art/create" class="btn btn-primary mt-2">Ajouter le premier tableau</a>
+                    </#if>
+                </div>
             </div>
         </#list>
     </div>

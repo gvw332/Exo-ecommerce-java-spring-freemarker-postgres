@@ -21,7 +21,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "USER_")
 @Builder
-
 public class User extends BaseEntity<Long> implements UserDetails {
 
     @Column(unique = true, nullable = false, length = 50)
@@ -30,12 +29,15 @@ public class User extends BaseEntity<Long> implements UserDetails {
     @Column(unique = true, nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = true)
+    private String password; // Nullable pour OAuth2
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Column
+    private String provider; // "local", "google", etc.
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
